@@ -1,0 +1,156 @@
+{% extends "page.html" %}
+{% load cms_tags %}
+{% load recaptcha2 %}
+{% load widget_tweaks %}
+{% load staticfiles %}
+{% block title %}НАПРАВИТЬ ОБРАЩЕНИЕ РУКОВОДСТВУ КОМПАНИИ ИЛИ АДМИНИСТРАТОРУ САЙТА{% page_attribute "page_title" %}{% endblock title %}
+{% block content %}
+    {% placeholder content or %}
+    {% endplaceholder %}
+    {% recaptcha_init %}
+    <form enctype="multipart/form-data" action="" method="post">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-6">
+                <div class="form-group">
+                {% csrf_token %}
+    {#                {% for field in form %}#}
+                    <div class="row" style="border: 1px solid #ccc; margin: 1rem 0 1rem 0; padding-bottom: 1rem">
+                        <div class="col-xs-12 col-sm-12 col-md-12" style="text-align: center;">
+{#                              <div style="border: 1px solid #cccccc; padding: 5px 10px;">СВЕДЕНИЯ ОБ АДРЕСАНТЕ:<span style="float: right;">▼</span></div>#}
+                              <div style="border: 1px solid #cccccc; padding: 5px 10px; margin: 1rem 0 1rem 0;">СВЕДЕНИЯ ОБ АДРЕСАНТЕ:</div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-5">
+                            <div class="labeled-field{% if form.surname.field.required %} required{% endif %} ">{{ form.surname.label_tag }}</div>
+                            <div>{{ form.surname|add_class:"form-control"|add_error_class:"is-invalid" }}</div>
+                            <div>{{ form.surname.errors }}</div>
+                            <div class="labeled-field{% if form.name.field.required %} required{% endif %}">{{ form.name.label_tag }}</div>
+                            <div>{{ form.name|add_class:"form-control"|add_error_class:"is-invalid" }}</div>
+                            <div>{{ form.name.errors }}</div>
+                            <div class="labeled-field{% if form.patronymic.field.required %} required{% endif %}">{{ form.patronymic.label_tag }}</div>
+                            <div>{{ form.patronymic|add_class:"form-control"|add_error_class:"is-invalid" }}</div>
+                            <div>{{ form.patronymic.errors }}</div>
+                            <div class="labeled-field{% if form.phone.field.required %} required{% endif %}">{{ form.phone.label_tag }}</div>
+                            <div>{{ form.phone|add_class:"form-control"|add_error_class:"is-invalid" }}</div>
+                            <div>{{ form.phone.errors }}</div>
+                            <div class="labeled-field{% if form.email.field.required %} required{% endif %}">{{ form.email.label_tag }}</div>
+                            <div>{{ form.email|add_class:"form-control"|add_error_class:"is-invalid" }}</div>
+                            <div>{{ form.email.errors }}</div>
+                        </div>
+{#                        <div class="col-xs-0 col-sm-0 col-md-1">#}
+{#                        </div>#}
+                        <div class="col-xs-12 col-sm-12 col-md-7">
+                            <div class="labeled-field{% if form.post.field.required %} required{% endif %}">{{ form.post.label_tag }}</div>
+                            <div>{{ form.post|add_class:"form-control"|add_error_class:"is-invalid" }}</div>
+                            <div>{{ form.post.errors }}</div>
+                            <div class="labeled-field{% if form.work_place.field.required %} required{% endif %}">{{ form.work_place.label_tag }}</div>
+                            <div>{{ form.work_place|add_class:"form-control"|add_error_class:"is-invalid" }}</div>
+                            <div>{{ form.work_place.errors }}</div>
+                            {% if form.contact_choice %} {# admin #}
+                            <div class="labeled-field{% if form.contact_choice.field.required %} required{% endif %}">{{ form.contact_choice.label_tag }}</div>
+                            <div>{{ form.contact_choice|add_class:"form-control"|add_error_class:"is-invalid" }}</div>
+                            <div>{{ form.contact_choice.errors }}</div>
+                            {% endif %}
+{#                            {% if form.subject %} {# expert #}
+{#                            <div class="labeled-field{% if form.subject.field.required %} required{% endif %}">{{ form.subject.label_tag }}</div>#}
+{#                            <div>{{ form.subject|add_class:"form-control"|add_error_class:"is-invalid" }}</div>#}
+{#                            <div>{{ form.subject.errors }}</div>#}
+{#                            {% endif %}#}
+                        </div>
+                    </div>
+    {#                {% endfor %}#}
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6">
+                <div class="form-group">
+                    {% if expert_question %}
+                        <div class="labeled-field{% if form.message.field.required %} required{% endif %}">Текст вопроса:</div>
+                    {% else %}
+                        <div class="labeled-field{% if form.message.field.required %} required{% endif %}">{{ form.message.label_tag }}</div>
+                    {% endif %}
+                    <div>{{ form.message|add_class:"form-control"|add_error_class:"is-invalid" }}</div>
+                    <div>{{ form.message.errors }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="padding-top: 0;">
+            <hr style="margin: 0;" />
+            <div class="col-xs-12 col-sm-12 col-md-6">
+                <div style="padding-top: 1rem;">
+{#                    display: flex;#}
+{#                    <div class="col-xs-12 col-sm-12 col-md-6 nopadding">#}
+                        <div>{{ form.file.label_tag }}</div>
+{#                    </div>#}
+{#                    <div class="col-xs-12 col-sm-12 col-md-6 nopadding">#}
+                        <div>{{ form.file|add_class:"form-control"|add_error_class:"is-invalid" }}</div>
+{#                        <div>{{ form.file|add_class:"form-control contact"|add_error_class:"is-invalid" }}</div>#}
+{#                    </div>#}
+                </div>
+                <div>{{ form.file.errors }}</div>
+                {% if form.errors %}<div style="color: red; margin-bottom: 1rem;">Если вы загружали файл, укажите его еще раз</div>{% endif %}
+                <br />
+                <div class="small">Доступные форматы: pdf, excel, word, jpg, png, zip, rar</div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div style="padding-top: 1rem; display: flex;">
+                    <span style="color: red; font-size: 2.5rem">*</span>&nbsp;Обязательные поля
+                </div>
+            </div>
+        </div>
+        <div class="row" style="padding-top: 1rem;">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div><span style="color: red">*</span>&nbsp;{{ form.personal_data }}&nbsp;
+                    С обработкой персональных сведений, указанных мной в обращении согласен
+                </div>
+                <div>{{ form.personal_data.errors }}</div>
+            </div>
+        </div>
+        <div class="row" style="padding-top: .8rem;">
+            <div class="col-xs-12 col-sm-12 col-md-7">
+                <div class="labeled-field required" style="text-align: left !important;">
+                    <label for="id_captcha_0">
+                    Введите ответ:
+                    </label>
+                </div>
+                <div>{{ form.captcha }}</div>
+                <div>{{ form.captcha.errors }}</div>
+            </div>
+        </div>
+        <div class="row" style="padding-top: .8rem;">
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <input class="btn btn-primary" type="submit" value="Отправить сообщение" />
+            </div>
+        </div>
+    </form>
+    <script type="text/javascript">
+    $('#nextbt').click(function() {
+        $('#rules').slideToggle();
+    });
+    $('#nextbt1').click(function() {
+        $('#experts').slideToggle();
+    });
+    if(!$('#id_phone').val()) {
+      $('#id_phone').val('7');
+    }
+    $('#id_phone').mask('+7 (000) 000-00-00');
+    $('#id_phone').on('input', function() {
+      if($(this).val().length < 2){
+        $(this).val('+7');
+      }
+    });
+    $(window).resize(function() {
+      var width = $(window).width();
+      if (width < 990 && width > 770) {
+        $('#id_message').attr('rows', '30')
+      } else {
+        $('#id_message').attr('rows', '15')
+      }
+    })
+    </script>
+    <script type="text/javascript" src="{% static 'js/rwd-table.min.js' %}"></script>
+{% endblock content %}
+
+
+   {% block css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/rwd-table.min.css' %}" />
+{% endblock %}

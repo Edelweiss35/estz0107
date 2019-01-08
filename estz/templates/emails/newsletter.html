@@ -1,0 +1,8 @@
+Подписка на рассылку<br>
+<br>
+Спасибо {{subscriber.name}}, что Вы подписались на нашу рассылку. 
+{% for article in articles %}
+<h3>{{article.title}}</h3>
+<p>{{article.lead_in}}</p>
+<hr>
+{% endfor %}

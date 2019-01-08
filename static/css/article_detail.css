@@ -1,0 +1,19 @@
+.content-subcriber .email-subcriber{
+	border: 2px solid #e5e5ea;
+    padding: 5px;
+    border-radius: 7px;
+    width: 100%;
+}
+
+.content-subcriber .button-subcriber{
+	margin-top:10px; 
+	outline: none;
+}
+.content-subcriber h4{
+	margin: 0;
+}
+
+.content-subcriber{
+	margin-top: 15px;
+}
+

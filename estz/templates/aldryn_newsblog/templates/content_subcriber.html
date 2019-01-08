@@ -1,0 +1,68 @@
+{% load i18n cms_tags apphooks_config_tags %}
+{% load staticfiles %}
+
+{% block content_css %} 
+    <link href="{% static 'css/article_detail.css' %}" rel="stylesheet">
+{% endblock %}
+
+<div class="row">
+    <div class="col-xs-12 col-sm-6 col-md-4 content-subcriber ">
+        {% static_placeholder "email_subcriber" %}
+        <hr>
+        <label for="name">имя подписчика:</label>
+        <input type="text" name="name" class="email-subcriber" id="name-subcriber" required>
+        <br>
+        <a href="#">RSS</a>
+        <br>
+        <label for="email">E-mail:</label>
+        <input type="email" name="email" class="email-subcriber" id="email-subcriber" required>
+        <br>
+        <button type="button" class="btn button-subcriber" id="btn-subcriber">Подписаться на новости</button>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-4 pull-right content-subcriber">
+        {% static_placeholder "email_unsubcriber" %}
+        <hr>
+        <label for="email">E-mail:</label>
+        <input type="email" name="email" class="email-subcriber" id="email-unsubcriber" required>
+        <br>
+        <button type="button" class="btn button-subcriber" id="btn-unsubcriber">Отписаться от получения<br> новостей</button>
+    </div>
+</div>
+{% block content_js %}
+
+    <script type="text/javascript">
+    $( document ).ready(function() {
+    var settings = {
+                url: "{% url 'news-subcriber' %}",
+                method: "POST",
+                data: {},
+                dataType: "json",
+            };
+    $('#btn-subcriber').click(function(){
+        settings.data = {'email':$('#email-subcriber').val(),
+                        'name':$('#name-subcriber').val()
+                }
+
+        $.ajax(settings).done(function (response) {
+                alert("An e-mail has sent to your acount, please check!");    
+            }).error(function () {
+                alert('E-mail are not valid');
+            });
+    });
+
+    $('#btn-unsubcriber').click(function(){
+        if (confirm('Are you sure ?')) {
+            settings.method = "DELETE";
+            settings.data = {'email':$('#email-unsubcriber').val(),
+                }
+            $.ajax(settings).done(function (response) {
+                alert("An e-mail has sent to your acount, please check!"); 
+            }).error(function (e) {
+                alert("This email is not found");
+            });
+        }
+    });
+
+    });
+    </script>
+{% endblock %}

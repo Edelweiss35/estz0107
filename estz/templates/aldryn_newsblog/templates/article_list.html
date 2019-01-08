@@ -1,0 +1,18 @@
+{% extends "./base.html" %}
+{% load i18n %}
+
+{% block newsblog_content %}
+	<table class="table table-striped">
+	  <tbody>
+	    
+	    {% for article in article_list %}
+    		{% include "./article.html" %}
+    	{% empty %}
+	        <p>{% trans "No items available" %}</p>
+	    {% endfor %}
+       
+	  </tbody>
+	</table>
+    {% include "./pagination.html" %}
+    {% include "./content_subcriber.html" %}
+{% endblock %}

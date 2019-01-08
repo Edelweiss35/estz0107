@@ -1,0 +1,77 @@
+{% extends 'admin_area/base.html' %}
+
+{% load model_name %}
+{% load staticfiles %}
+
+{% block css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/rwd-table.min.css' %}" />
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'js/rwd-table.min.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<div style="padding: 1rem;">
+    <div style="">
+        <h3>ОБРАЩЕНИЯ К ЭКСПЕРТАМ</h3>
+    </div>
+<div class="table-responsive">
+<table class="table table-small-font table-bordered table-striped">
+{% for instance in data %}
+    {% if forloop.first %}
+        <thead>
+            <tr>
+               {% for fieldname, value in instance.items %}
+                   {% if fieldname != "status" %}
+                       <th scope="col">{% field_name model fieldname %}</th>
+                   {% endif %}
+               {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+        {% endif %}
+        <tr>
+        <tr class="table-link-row"
+            onclick="document.location = '{% url 'admin-contact-expert-detail' instance.id %}';"
+{#            onclick="document.location = '{{ instance.get_admin_url }}';"#}
+            style="cursor: pointer; {% if instance.status == 1 or not instance.status %}background-color:red;{% endif %}">
+        {% for field, value in instance.items %}
+            {% if field != "status" %}
+            <td>{% convert_fields_value_nice_display model field value %}</td>
+            {% endif %}
+        {% endfor %}
+        </tr>
+        {% if forloop.last %}
+      </tbody>
+    {% endif %}
+{% endfor %}
+</table>
+</div>
+
+    {# TODO move to include#}
+    {% if is_paginated %}
+      <ul class="pagination">
+        {% if page_obj.has_previous %}
+          <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&laquo;</span></li>
+        {% endif %}
+        {% for i in paginator.page_range %}
+          {% if page_obj.number == i %}
+            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+          {% else %}
+            <li><a href="?page={{ i }}">{{ i }}</a></li>
+          {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+          <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&raquo;</span></li>
+        {% endif %}
+      </ul>
+    {% endif %}
+</div>
+{% endblock %}
